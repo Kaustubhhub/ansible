@@ -3,12 +3,14 @@
   become: true
   tasks:
     - name: install updates (redhat)
+      tags: always
       yum:
         update_only: yes
         update_cache: yes
       when: ansible_distribution == "RedHat"
 
     - name: install updates (ubuntu)
+      tags: always
       apt:
         upgrade: dist
         update_cache: yes
@@ -39,12 +41,14 @@
   become: true
   tasks:
     - name: install MariaDB (RedHat)
+      tags: mariadb, mariadb-server, redhat
       dnf:
         name:
           - mariadb
           - mariadb-server
         state: latest
     - name: enable & start mariadb
+      tags: mariadb
       systemd:
         name: mariadb
         state: started
@@ -54,6 +58,7 @@
   become: true
   tasks:
     - name: install samba
+      tags: samba
       package: 
         name: samba
         state: latest
