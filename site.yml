@@ -1,0 +1,59 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: install updates (redhat)
+      yum:
+        update_only: yes
+        update_cache: yes
+      when: ansible_distribution == "RedHat"
+
+    - name: install updates (ubuntu)
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution == "ubuntu"
+
+- hosts: web_servers
+  become: true
+  tasks:
+    - name: Install Apache php support
+      yum:
+        name:
+          - httpd
+          - php-fpm
+        state: latest
+      when: ansible_distribution == "RedHat"
+
+    - name: Install Apache and php support (Ubuntu)
+      apt:
+        name:
+          - apache2
+          - php
+          - php-fpm
+          - libapache2-mod-php
+        state: latest
+      when: ansible_distribution == "Ubuntu"
+
+- hosts: db_servers
+  become: true
+  tasks:
+    - name: install MariaDB (RedHat)
+      dnf:
+        name:
+          - mariadb
+          - mariadb-server
+        state: latest
+    - name: enable & start mariadb
+      systemd:
+        name: mariadb
+        state: started
+        enabled: yes    
+
+- hosts: file_servers
+  become: true
+  tasks:
+    - name: install samba
+      package: 
+        name: samba
+        state: latest

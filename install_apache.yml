@@ -2,10 +2,22 @@
 - hosts: all
   become: true
   tasks:
-    - name: Install Apache and php support
-      package:
+    - name: Install Apache php support
+      yum:
         name:
-          - "{{ apache_package }}" #httpd
-          - "{{ php_package }}" #php-fpm
+          - httpd
+          - php-fpm
         state: latest
         update_cache: yes
+      when: ansible_distribution == "RedHat"
+
+    - name: Install Apache and php support (Ubuntu)
+      apt:
+        name:
+          - apache2
+          - php
+          - php-fpm
+          - libapache2-mod-php
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"

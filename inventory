@@ -1,3 +1,8 @@
-13.53.132.18 apache_package=httpd php_package=php-fpm    
-56.228.25.223 apache_package=httpd php_package=php-fpm
-13.60.45.119 apache_package=apache2 php_package=php-fpm
+[web_servers]
+13.53.132.18
+    
+[db_servers]
+56.228.25.223
+
+[file_servers]
+13.60.45.119
